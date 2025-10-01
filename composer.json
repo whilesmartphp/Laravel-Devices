@@ -2,6 +2,7 @@
   "name": "whilesmart/laravel-user-devices",
   "description": "Package for managing user devices across our projects",
   "license": "MIT",
+  "package-version": "1.0.1",
   "authors": [
     {
       "name": "WhileSmart",
