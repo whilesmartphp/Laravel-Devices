@@ -5,10 +5,12 @@ namespace Whilesmart\UserDevices\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Notifications\Notifiable;
 
 class Device extends Model
 {
     use HasFactory;
+    use Notifiable;
 
     protected $fillable = [
         'name',
@@ -30,5 +32,12 @@ class Device extends Model
     public function deviceable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function routeNotificationForFcm()
+    {
+        logger()->info('sending push notification to device with token '.$this->token);
+
+        return $this->token;
     }
 }
