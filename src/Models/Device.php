@@ -36,8 +36,9 @@ class Device extends Model
 
     public function routeNotificationForFcm()
     {
-        logger()->info('sending push notification to device with token '.$this->token);
-
+        // @phpstan-ignore-next-line
+        logger()->info('sending push notification to device with token ' . $this->token);
+        // @phpstan-ignore-next-line
         return $this->token;
     }
 }

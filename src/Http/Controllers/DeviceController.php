@@ -38,11 +38,11 @@ class DeviceController extends Controller implements IDeviceController
         }
     }
 
-    public function destroy(Request $request, $id): JsonResponse
+    public function destroy(Request $request, $deviceId): JsonResponse
     {
         try {
             $user = $request->user();
-            $device = $user->devices()->find($id);
+            $device = $user->devices()->find($deviceId);
             if (is_null($device)) {
                 return $this->failure(__('devices.not_found'), 404);
             }
@@ -50,7 +50,6 @@ class DeviceController extends Controller implements IDeviceController
             $device->delete();
 
             return $this->success([], __('devices.deleted'), 200);
-
         } catch (Exception $err) {
             Log::error($err);
 
@@ -58,7 +57,7 @@ class DeviceController extends Controller implements IDeviceController
         }
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $deviceId): JsonResponse
     {
         $request->validate([
             'token' => 'required|string',
@@ -71,7 +70,7 @@ class DeviceController extends Controller implements IDeviceController
         try {
             $user = $request->user();
 
-            $device = $user->devices()->find($id);
+            $device = $user->devices()->find($deviceId);
             if (is_null($device)) {
                 return $this->failure(__('devices.not_found'), 404);
             }
@@ -79,7 +78,6 @@ class DeviceController extends Controller implements IDeviceController
             $device->update($data);
 
             return $this->success($device, __('devices.updated'), 200);
-
         } catch (Exception $err) {
             Log::error($err);
 
