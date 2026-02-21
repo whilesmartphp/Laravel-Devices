@@ -11,7 +11,9 @@ use Whilesmart\UserDevices\Traits\HasDevices;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Workbench\Database\Factories\UserFactory> */
-    use HasDevices, HasFactory, Notifiable;
+    use HasDevices;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.

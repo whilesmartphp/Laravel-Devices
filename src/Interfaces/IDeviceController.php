@@ -30,7 +30,6 @@ interface IDeviceController
         responses: [
             new OA\Response(response: 200, description: 'OK'),
         ]
-
     )]
     public function store(Request $request): JsonResponse;
 
@@ -48,7 +47,7 @@ interface IDeviceController
             new OA\Response(response: 200, description: 'OK'),
         ]
     )]
-    public function destroy(Request $request, $id): JsonResponse;
+    public function destroy(Request $request, $deviceId): JsonResponse;
 
     #[OA\Put(
         path: '/api/v1/devices/{id}',
@@ -73,7 +72,7 @@ interface IDeviceController
         responses: [new OA\Response(response: 200, description: 'OK'),
         ]
     )]
-    public function update(Request $request, $id): JsonResponse;
+    public function update(Request $request, $deviceId): JsonResponse;
 
     #[OA\Put(
         path: '/api/v1/devices/identifier/{identifier}',
