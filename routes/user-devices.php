@@ -17,3 +17,6 @@ use Whilesmart\UserDevices\Http\Controllers\DeviceController;
 // User Devices routes
 
 Route::apiResource('devices', DeviceController::class);
+
+// Alternative route to update device by identifier (UUID)
+Route::put('devices/by-identifier/{identifier}', [DeviceController::class, 'updateByIdentifier']);

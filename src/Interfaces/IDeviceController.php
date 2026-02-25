@@ -75,6 +75,32 @@ interface IDeviceController
     )]
     public function update(Request $request, $id): JsonResponse;
 
+    #[OA\Put(
+        path: '/api/v1/devices/by-identifier/{identifier}',
+        summary: "Update a device on the user's profile by identifier (UUID)",
+        description: "Update a device using its identifier (UUID) instead of database ID. Useful when the app needs to update FCM token without knowing the device's database ID.",
+        security: [],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'name', description: 'Name of the device', type: 'string'),
+                    new OA\Property(property: 'token', description: 'FCM Token', type: 'string'),
+                    new OA\Property(property: 'type', description: 'Device type. web|mobile', type: 'string'),
+                    new OA\Property(property: 'identifier', description: 'Device identifier', type: 'string'),
+                    new OA\Property(property: 'platform', description: 'Device platform', type: 'string'),
+                ]
+            )
+        ),
+        tags: ['Device'],
+        parameters: [
+            new OA\Parameter(name: 'identifier', description: 'Device identifier (UUID)', in: 'path', required: true),
+        ],
+        responses: [new OA\Response(response: 200, description: 'OK'),
+        ]
+    )]
+    public function updateByIdentifier(Request $request, $identifier): JsonResponse;
+
     #[OA\Get(
         path: '/api/v1/devices/',
         summary: "Get a user's devices",
