@@ -87,6 +87,35 @@ class DeviceController extends Controller implements IDeviceController
         }
     }
 
+    public function updateByIdentifier(Request $request, $identifier): JsonResponse
+    {
+        $request->validate([
+            'token' => 'required|string',
+            'name' => 'nullable|string',
+            'type' => 'nullable|string|in:web,mobile',
+            'identifier' => 'nullable|string',
+            'platform' => 'nullable|string',
+        ]);
+
+        try {
+            $user = $request->user();
+
+            $device = $user->devices()->where('identifier', $identifier)->first();
+            if (is_null($device)) {
+                return $this->failure(__('devices.not_found'), 404);
+            }
+            $data = $request->all();
+            $device->update($data);
+
+            return $this->success($device, __('devices.updated'), 200);
+
+        } catch (Exception $err) {
+            Log::error($err);
+
+            return $this->failure(__('devices.operation_failed'), 500);
+        }
+    }
+
     public function index(Request $request): JsonResponse
     {
         $user = $request->user();
