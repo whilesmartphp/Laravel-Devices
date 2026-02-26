@@ -57,6 +57,9 @@
     ],
     "lint": [
       "@php vendor/bin/pint --ansi"
+    ],
+    "test": [
+      "./vendor/bin/testbench package:test"
     ]
   }
 }

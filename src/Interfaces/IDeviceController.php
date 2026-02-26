@@ -78,17 +78,14 @@ interface IDeviceController
     #[OA\Put(
         path: '/api/v1/devices/by-identifier/{identifier}',
         summary: "Update a device on the user's profile by identifier (UUID)",
-        description: "Update a device using its identifier (UUID) instead of database ID. Useful when the app needs to update FCM token without knowing the device's database ID.",
+        description: 'Update a device using its identifier (UUID) instead of database ID. Only the token (and optionally name) can be updated. Device name, identifier, type and platform cannot change.',
         security: [],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: 'name', description: 'Name of the device', type: 'string'),
                     new OA\Property(property: 'token', description: 'FCM Token', type: 'string'),
-                    new OA\Property(property: 'type', description: 'Device type. web|mobile', type: 'string'),
-                    new OA\Property(property: 'identifier', description: 'Device identifier', type: 'string'),
-                    new OA\Property(property: 'platform', description: 'Device platform', type: 'string'),
+                    new OA\Property(property: 'name', description: 'Name of the device', type: 'string'),
                 ]
             )
         ),
