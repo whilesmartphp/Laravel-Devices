@@ -130,6 +130,97 @@ class DevicesTest extends TestCase
 
     }
 
+    public function test_api_user_can_update_device_by_identifier()
+    {
+        $user = $this->createUser();
+        $response = $this->actingAs($user)->postJson('/api/devices', [
+            'name' => 'test',
+            'type' => 'mobile',
+            'token' => 'qwertyuiopasdfghjklzxcvbnm',
+            'identifier' => 'device-uuid-123',
+        ]);
+
+        $response->assertStatus(201);
+
+        $response = $this->actingAs($user)->putJson('/api/devices/by-identifier/device-uuid-123', [
+            'token' => 'updated-token-12345',
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertEquals(__('devices.updated'), $response->json('message'));
+        $this->assertEquals('updated-token-12345', $response['data']['token']);
+    }
+
+    public function test_api_user_cannot_update_protected_fields_by_identifier()
+    {
+
+        $user = $this->createUser();
+        $response = $this->actingAs($user)->postJson('/api/devices', [
+            'name' => 'test',
+            'type' => 'mobile',
+            'token' => 'qwertyuiopasdfghjklzxcvbnm',
+            'identifier' => 'device-uuid-456',
+            'platform' => 'ios',
+        ]);
+
+        $response->assertStatus(201);
+
+        // Try to update protected fields (name, identifier, type, platform) - these should be ignored
+        $response = $this->actingAs($user)->putJson('/api/devices/by-identifier/device-uuid-456', [
+            'token' => 'new-token',
+            'name' => 'updated-name',
+            'identifier' => 'new-identifier',
+            'type' => 'web',
+            'platform' => 'android',
+        ]);
+
+        $response->assertStatus(200);
+
+        // Token should be updated
+        $this->assertEquals('new-token', $response['data']['token']);
+
+        // Protected fields should remain unchanged (only token and name can be updated)
+        $this->assertEquals('updated-name', $response['data']['name']);
+        $this->assertEquals('device-uuid-456', $response['data']['identifier']);
+        $this->assertEquals('mobile', $response['data']['type']);
+        $this->assertEquals('ios', $response['data']['platform']);
+    }
+
+    public function test_api_user_cannot_update_device_by_invalid_identifier()
+    {
+        $user = $this->createUser();
+
+        // Try to update a non-existent device
+        $response = $this->actingAs($user)->putJson('/api/devices/by-identifier/non-existent-uuid', [
+            'token' => 'new-token',
+        ]);
+
+        $response->assertStatus(404);
+        $this->assertEquals(__('devices.not_found'), $response->json('message'));
+    }
+
+    public function test_api_user_cannot_update_another_users_device_by_identifier()
+    {
+        $user1 = $this->createUser();
+        $response = $this->actingAs($user1)->postJson('/api/devices', [
+            'name' => 'test',
+            'type' => 'mobile',
+            'token' => 'qwertyuiopasdfghjklzxcvbnm',
+            'identifier' => 'device-uuid-789',
+        ]);
+
+        $response->assertStatus(201);
+
+        $user2 = $this->createUser();
+
+        // User2 tries to update User1's device
+        $response = $this->actingAs($user2)->putJson('/api/devices/by-identifier/device-uuid-789', [
+            'token' => 'hacked-token',
+        ]);
+
+        $response->assertStatus(404);
+    }
+
     /**
      * Define database migrations.
      *

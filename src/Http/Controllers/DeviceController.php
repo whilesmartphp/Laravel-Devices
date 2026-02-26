@@ -89,12 +89,11 @@ class DeviceController extends Controller implements IDeviceController
 
     public function updateByIdentifier(Request $request, $identifier): JsonResponse
     {
+        // Only allow token (and optionally name) to be updated for security
+        // Device name, identifier, type and platform cannot change
         $request->validate([
             'token' => 'required|string',
             'name' => 'nullable|string',
-            'type' => 'nullable|string|in:web,mobile',
-            'identifier' => 'nullable|string',
-            'platform' => 'nullable|string',
         ]);
 
         try {
@@ -104,7 +103,9 @@ class DeviceController extends Controller implements IDeviceController
             if (is_null($device)) {
                 return $this->failure(__('devices.not_found'), 404);
             }
-            $data = $request->all();
+
+            // $data = $request->validated();
+            $data = $request->only(['token', 'name']);
             $device->update($data);
 
             return $this->success($device, __('devices.updated'), 200);
