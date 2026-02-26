@@ -14,6 +14,7 @@ class Device extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'token',
         'deviceable_id',
         'deviceable_type',
