@@ -106,7 +106,6 @@ class DeviceController extends Controller implements IDeviceController
             $device->update($data);
 
             return $this->success($device, __('devices.updated'), 200);
-
         } catch (Exception $err) {
             Log::error($err);
 
