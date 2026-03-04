@@ -93,7 +93,6 @@ class DeviceController extends Controller implements IDeviceController
         // Device name, identifier, type and platform cannot change
         $request->validate([
             'token' => 'required|string',
-            'name' => 'nullable|string',
         ]);
 
         try {
@@ -105,7 +104,7 @@ class DeviceController extends Controller implements IDeviceController
             }
 
             // $data = $request->validated();
-            $data = $request->only(['token', 'name']);
+            $data = $request->only(['token']);
             $device->update($data);
 
             return $this->success($device, __('devices.updated'), 200);
