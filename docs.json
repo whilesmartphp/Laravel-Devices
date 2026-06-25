@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/whilesmart/docs-kit/main/schema/docs.schema.json",
+  "name": "Laravel User Devices",
+  "description": "Package for managing user devices and push notification tokens across Laravel applications",
+  "icon": "device-tablet",
+  "category": {
+    "language": "php",
+    "framework": "laravel"
+  },
+  "sidebar": [
+    { "title": "Installation", "path": "docs/installation.md" },
+    { "title": "Quick Start", "path": "docs/quick-start.md" },
+    { "title": "API Endpoints", "path": "docs/api-endpoints.md" },
+    { "title": "HasDevices Trait", "path": "docs/has-devices-trait.md" },
+    { "title": "Push Notifications", "path": "docs/push-notifications.md" }
+  ]
+}
